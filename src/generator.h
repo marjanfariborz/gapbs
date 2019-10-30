@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <cinttypes>
 #include <random>
+#include <boost/random/uniform_real_distribution.hpp>
 
 #include "graph.h"
 #include "pvector.h"
@@ -84,7 +85,7 @@ class Generator {
     #pragma omp parallel
     {
       std::mt19937 rng;
-      std::uniform_real_distribution<float> udist(0, 1.0f);
+      boost::random::uniform_real_distribution<float> udist(0, 1.0f);
       #pragma omp for
       for (int64_t block=0; block < num_edges_; block+=block_size) {
         rng.seed(kRandSeed + block/block_size);
