@@ -7,12 +7,12 @@
 #include <algorithm>
 #include <cinttypes>
 #include <random>
-#include <boost/random/uniform_real_distribution.hpp>
+#include <iostream>
 
 #include "graph.h"
 #include "pvector.h"
 #include "util.h"
-
+#include <boost/random/uniform_real_distribution.hpp>
 
 /*
 GAP Benchmark Suite
@@ -84,10 +84,14 @@ class Generator {
     EdgeList el(num_edges_);
     #pragma omp parallel
     {
-      std::mt19937 rng;
-      boost::random::uniform_real_distribution<float> udist(0, 1.0f);
+      static std::mt19937 rng;
+      static boost::random::uniform_real_distribution<> udist(0, 1.0f);
+      #pragma omp threadprivate(rng , udist)
       #pragma omp for
       for (int64_t block=0; block < num_edges_; block+=block_size) {
+//	 std::mt19937 rng;
+//	 boost::random::uniform_real_distribution<float> udist(0, 1.0f);
+
         rng.seed(kRandSeed + block/block_size);
         for (int64_t e=block; e < std::min(block+block_size, num_edges_); e++) {
           NodeID_ src = 0, dst = 0;
