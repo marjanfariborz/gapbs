@@ -85,3 +85,6 @@ Please cite this code by the benchmark specification:
 
 Scott Beamer, Krste Asanović, David Patterson. [*The GAP Benchmark Suite*](http://arxiv.org/abs/1508.03619). arXiv:1508.03619 [cs.DC], 2015.
 
+    build/ALPHA/gem5.debug configs/example/fs.py -r N
+    OR
+    build/ALPHA/gem5.debug configs/example/fs.py --checkpoint-restore=N
