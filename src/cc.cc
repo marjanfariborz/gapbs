@@ -14,8 +14,10 @@
 #include "graph.h"
 #include "pvector.h"
 #include "timer.h"
-
-
+#include "/home/fariborz/gem5/util/m5/m5op.h"
+#include "/home/fariborz/base_experiment/gem5/util/m5/m5_mmap.h"
+#include "/home/fariborz/gem5/include/gem5/m5ops.h"
+//extern "C" void roi_begin();
 /*
 GAP Benchmark Suite
 Kernel: Connected Components (CC)
@@ -36,7 +38,6 @@ which restructures and extends the Shiloach-Vishkin algorithm [2].
 
 
 using namespace std;
-
 
 // Place nodes u and v in same component of lower component ID
 void Link(NodeID u, NodeID v, pvector<NodeID>& comp) {
@@ -213,15 +214,34 @@ bool CCVerifier(const Graph &g, const pvector<NodeID> &comp) {
       return false;
   return true;
 }
-
-
+/***
+extern "C" {
+	void roi_begin();
+	void roi_end();
+	}
+***/
 int main(int argc, char* argv[]) {
+  std::cout<<"HEREEEEEEEEEEEEEE1" << '\n';
+  map_m5_mem();
+//        std::cout<<"HOOOOOOOOOK"<< HOOKS <<'\n';
+ //       roi_begin();
+//#endif	
+  m5_work_begin(0,0);
+  std::cout<<"---------------------roi begin--------------------" << '\n';
   CLApp cli(argc, argv, "connected-components-afforest");
+  std::cout<<"INSIDE ROI"<< '\n';
   if (!cli.ParseArgs())
     return -1;
   Builder b(cli);
   Graph g = b.MakeGraph();
+  std::cout<<"---------------------roi begin--------------------" << '\n';
   auto CCBound = [](const Graph& gr){ return Afforest(gr); };
   BenchmarkKernel(cli, g, CCBound, PrintCompStats, CCVerifier);
+  std::cout<<"---------------------roi end--------------------" << '\n';
+  m5_work_end(0,0);
+//#ifdef HOOKS
+//        cli roi_end
+//#endif	
+  std::cout<<"HEREEEEEEEEEEEEEE2"<< '\n';
   return 0;
 }

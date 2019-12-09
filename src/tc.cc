@@ -12,6 +12,9 @@
 #include "graph.h"
 #include "pvector.h"
 
+#include "/home/fariborz/gem5/util/m5/m5op.h"
+#include "/home/fariborz/base_experiment/gem5/util/m5/m5_mmap.h"
+#include "/home/fariborz/gem5/include/gem5/m5ops.h"
 
 /*
 GAP Benchmark Suite
@@ -124,6 +127,9 @@ bool TCVerifier(const Graph &g, size_t test_total) {
 
 
 int main(int argc, char* argv[]) {
+  map_m5_mem();
+  m5_work_begin(0,0);
+  std::cout<<"---------------------roi begin--------------------" << '\n';
   CLApp cli(argc, argv, "triangle count");
   if (!cli.ParseArgs())
     return -1;
@@ -134,5 +140,7 @@ int main(int argc, char* argv[]) {
     return -2;
   }
   BenchmarkKernel(cli, g, Hybrid, PrintTriangleStats, TCVerifier);
+    std::cout<<"---------------------roi end--------------------" << '\n';
+  m5_work_end(0,0);
   return 0;
 }

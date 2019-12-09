@@ -16,6 +16,9 @@
 #include "timer.h"
 #include "util.h"
 
+#include "/home/fariborz/gem5/util/m5/m5op.h"
+#include "/home/fariborz/base_experiment/gem5/util/m5/m5_mmap.h"
+#include "/home/fariborz/gem5/include/gem5/m5ops.h"
 
 /*
 GAP Benchmark Suite
@@ -223,6 +226,9 @@ bool BCVerifier(const Graph &g, SourcePicker<Graph> &sp, NodeID num_iters,
 
 
 int main(int argc, char* argv[]) {
+  map_m5_mem();
+  m5_work_begin(0,0);
+  std::cout<<"---------------------roi begin--------------------" << '\n';
   CLIterApp cli(argc, argv, "betweenness-centrality", 1);
   if (!cli.ParseArgs())
     return -1;
@@ -239,5 +245,7 @@ int main(int argc, char* argv[]) {
     return BCVerifier(g, vsp, cli.num_iters(), scores);
   };
   BenchmarkKernel(cli, g, BCBound, PrintTopScores, VerifierBound);
+  std::cout<<"---------------------roi end--------------------" << '\n';
+  m5_work_end(0,0);
   return 0;
 }

@@ -6,6 +6,9 @@ pr
 sssp
 tc
 
+*.o
+src/*.o
+
 test/out/*.out
 
 benchmark/out/*.out
