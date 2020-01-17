@@ -13,6 +13,9 @@
 #include "pvector.h"
 #include "sliding_queue.h"
 #include "timer.h"
+#include "/home/fariborz/gem5/util/m5/m5op.h"
+#include "/home/fariborz/base_experiment/gem5/util/m5/m5_mmap.h"
+#include "/home/fariborz/gem5/include/gem5/m5ops.h"
 
 
 /*
@@ -248,11 +251,21 @@ int main(int argc, char* argv[]) {
   Builder b(cli);
   Graph g = b.MakeGraph();
   SourcePicker<Graph> sp(g, cli.start_vertex());
+  #ifdef HOOKS
+      map_m5_mem();
+      m5_work_begin(0,0);
+      std::cout<<"---------------------roi begin--------------------" << '\n';
+  #endif
   auto BFSBound = [&sp] (const Graph &g) { return DOBFS(g, sp.PickNext()); };
   SourcePicker<Graph> vsp(g, cli.start_vertex());
   auto VerifierBound = [&vsp] (const Graph &g, const pvector<NodeID> &parent) {
     return BFSVerifier(g, vsp.PickNext(), parent);
   };
   BenchmarkKernel(cli, g, BFSBound, PrintBFSStats, VerifierBound);
+  #ifdef HOOKS
+      std::cout<<"---------------------roi end--------------------" << '\n';
+      m5_work_end(0,0);
+  #endif
+
   return 0;
 }

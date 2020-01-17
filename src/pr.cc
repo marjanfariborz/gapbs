@@ -10,6 +10,9 @@
 #include "command_line.h"
 #include "graph.h"
 #include "pvector.h"
+#include "/home/fariborz/gem5/util/m5/m5op.h"
+#include "/home/fariborz/base_experiment/gem5/util/m5/m5_mmap.h"
+#include "/home/fariborz/gem5/include/gem5/m5ops.h"
 
 
 /*
@@ -99,6 +102,11 @@ int main(int argc, char* argv[]) {
     return -1;
   Builder b(cli);
   Graph g = b.MakeGraph();
+  #ifdef HOOKS
+      map_m5_mem();
+      m5_work_begin(0,0);
+      std::cout<<"---------------------roi begin--------------------" << '\n';
+  #endif
   auto PRBound = [&cli] (const Graph &g) {
     return PageRankPull(g, cli.max_iters(), cli.tolerance());
   };
@@ -106,5 +114,9 @@ int main(int argc, char* argv[]) {
     return PRVerifier(g, scores, cli.tolerance());
   };
   BenchmarkKernel(cli, g, PRBound, PrintTopScores, VerifierBound);
+  #ifdef HOOKS
+      std::cout<<"---------------------roi end--------------------" << '\n';
+      m5_work_end(0,0);
+  #endif
   return 0;
 }

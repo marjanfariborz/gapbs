@@ -14,6 +14,9 @@
 #include "platform_atomics.h"
 #include "pvector.h"
 #include "timer.h"
+#include "/home/fariborz/gem5/util/m5/m5op.h"
+#include "/home/fariborz/base_experiment/gem5/util/m5/m5_mmap.h"
+#include "/home/fariborz/gem5/include/gem5/m5ops.h"
 
 
 /*
@@ -179,6 +182,12 @@ int main(int argc, char* argv[]) {
   WeightedBuilder b(cli);
   WGraph g = b.MakeGraph();
   SourcePicker<WGraph> sp(g, cli.start_vertex());
+  #ifdef HOOKS
+      map_m5_mem();
+      m5_work_begin(0,0);
+      std::cout<<"---------------------roi begin--------------------" << '\n';
+  #endif
+
   auto SSSPBound = [&sp, &cli] (const WGraph &g) {
     return DeltaStep(g, sp.PickNext(), cli.delta());
   };
@@ -187,5 +196,9 @@ int main(int argc, char* argv[]) {
     return SSSPVerifier(g, vsp.PickNext(), dist);
   };
   BenchmarkKernel(cli, g, SSSPBound, PrintSSSPStats, VerifierBound);
+  #ifdef HOOKS
+      std::cout<<"---------------------roi end--------------------" << '\n';
+      m5_work_end(0,0);
+  #endif
   return 0;
 }
