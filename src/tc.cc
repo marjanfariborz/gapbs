@@ -135,11 +135,7 @@ int main(int argc, char* argv[]) {
     cout << "Input graph is directed but tc requires undirected" << endl;
     return -2;
   }
-  #ifdef HOOKS
-      map_m5_mem();
-      m5_work_begin(0,0);
-      std::cout<<"---------------------roi begin--------------------" << '\n';
-  #endif
+
   BenchmarkKernel(cli, g, Hybrid, PrintTriangleStats, TCVerifier);
   #ifdef HOOKS
       std::cout<<"---------------------roi end--------------------" << '\n';

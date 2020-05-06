@@ -182,11 +182,6 @@ int main(int argc, char* argv[]) {
   WeightedBuilder b(cli);
   WGraph g = b.MakeGraph();
   SourcePicker<WGraph> sp(g, cli.start_vertex());
-  #ifdef HOOKS
-      map_m5_mem();
-      m5_work_begin(0,0);
-      std::cout<<"---------------------roi begin--------------------" << '\n';
-  #endif
 
   auto SSSPBound = [&sp, &cli] (const WGraph &g) {
     return DeltaStep(g, sp.PickNext(), cli.delta());

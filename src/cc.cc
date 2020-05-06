@@ -223,11 +223,7 @@ int main(int argc, char* argv[]) {
     return -1;
   Builder b(cli);
   Graph g = b.MakeGraph();
-  #ifdef HOOKS
-      map_m5_mem();
-      m5_work_begin(0,0);
-      std::cout<<"---------------------roi begin--------------------" << '\n';
-  #endif
+  
   auto CCBound = [](const Graph& gr){ return Afforest(gr); };
   BenchmarkKernel(cli, g, CCBound, PrintCompStats, CCVerifier);
   #ifdef HOOKS

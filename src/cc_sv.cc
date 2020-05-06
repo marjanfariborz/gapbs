@@ -158,11 +158,6 @@ int main(int argc, char* argv[]) {
     return -1;
   Builder b(cli);
   Graph g = b.MakeGraph();
-  #ifdef HOOKS
-      map_m5_mem();
-      m5_work_begin(0,0);
-      std::cout<<"---------------------roi begin--------------------" << '\n';
-  #endif
 
   BenchmarkKernel(cli, g, ShiloachVishkin, PrintCompStats, CCVerifier);
   #ifdef HOOKS

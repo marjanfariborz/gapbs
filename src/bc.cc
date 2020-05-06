@@ -233,11 +233,7 @@ int main(int argc, char* argv[]) {
   Builder b(cli);
   Graph g = b.MakeGraph();
   SourcePicker<Graph> sp(g, cli.start_vertex());
-  #ifdef HOOKS
-      map_m5_mem();
-      m5_work_begin(0,0);
-      std::cout<<"---------------------roi begin--------------------" << '\n';
-  #endif
+  
   auto BCBound =
     [&sp, &cli] (const Graph &g) { return Brandes(g, sp, cli.num_iters()); };
   SourcePicker<Graph> vsp(g, cli.start_vertex());

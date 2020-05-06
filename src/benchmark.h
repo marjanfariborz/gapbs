@@ -17,6 +17,9 @@
 #include "util.h"
 #include "writer.h"
 
+#include "/home/fariborz/gem5/util/m5/m5op.h"
+#include "/home/fariborz/base_experiment/gem5/util/m5/m5_mmap.h"
+#include "/home/fariborz/gem5/include/gem5/m5ops.h"
 
 /*
 GAP Benchmark Suite
@@ -101,6 +104,12 @@ void BenchmarkKernel(const CLApp &cli, const GraphT_ &g,
                      GraphFunc kernel, AnalysisFunc stats,
                      VerifierFunc verify) {
   g.PrintStats();
+  
+  #ifdef HOOKS
+      map_m5_mem();
+      m5_work_begin(0,0);
+      std::cout<<"---------------------roi begin--------------------" << '\n';
+  #endif
   double total_seconds = 0;
   Timer trial_timer;
   for (int iter=0; iter < cli.num_trials(); iter++) {
